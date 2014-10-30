@@ -66,16 +66,38 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\main.css" />
+    <Content Include="img\7.png" />
+    <Content Include="img\banana.png" />
+    <Content Include="img\bar.png" />
+    <Content Include="img\bell.png" />
+    <Content Include="img\bet_10_button.png" />
+    <Content Include="img\bet_1_button.png" />
+    <Content Include="img\bet_5_button.png" />
+    <Content Include="img\blank.png" />
+    <Content Include="img\cherry.png" />
+    <Content Include="img\empty_button.png" />
+    <Content Include="img\grapes.png" />
+    <Content Include="img\orange.png" />
+    <Content Include="img\power_button.png" />
+    <Content Include="img\reset_button.png" />
+    <Content Include="img\slot_machine.png" />
+    <Content Include="img\spin_button.png" />
     <Content Include="index.html" />
-    <Content Include="js\main.js" />
+    <Content Include="Scripts\js\main.js" />
+    <Content Include="Scripts\js\createjs-2013.12.12.min.js" />
+    <Content Include="Scripts\js\slotMachine.js" />
+    <Content Include="Scripts\typings\createjs-lib\createjs-lib.d.ts" />
+    <Content Include="Scripts\typings\createjs\createjs.d.ts" />
+    <Content Include="Scripts\typings\easeljs\easeljs.d.ts" />
+    <Content Include="Scripts\typings\preloadjs\preloadjs.d.ts" />
+    <Content Include="Scripts\typings\soundjs\soundjs.d.ts" />
+    <Content Include="Scripts\typings\tweenjs\tweenjs.d.ts" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="img\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
