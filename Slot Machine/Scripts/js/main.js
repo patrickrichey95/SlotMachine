@@ -1,4 +1,125 @@
-﻿/// <reference path="jquery.js" />
+﻿//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Drawing
+
+/// <reference path="easeljs-0.7.1.min.js" />
+var stage;
+var count = 0;
+
+//create variables for images
+var seven = new createjs.Bitmap("img/7.png");
+var bar = new createjs.Bitmap("img/bar.png");
+var bell = new createjs.Bitmap("img/bell.png");
+var banana = new createjs.Bitmap("img/banana.png");
+var blank = new createjs.Bitmap("img/blank.png");
+var cherry = new createjs.Bitmap("img/cherry.png");
+var grapes = new createjs.Bitmap("img/grapes.png");
+var orange = new createjs.Bitmap("img/orange.png");
+var bet1 = new createjs.Bitmap("img/bet_1_button.png");
+var bet1hover = new createjs.Bitmap("img/bet_1_hover.png");
+var bet5 = new createjs.Bitmap("img/bet_5_button.png");
+var bet5hover = new createjs.Bitmap("img/bet_5_hover.png");
+var bet10 = new createjs.Bitmap("img/bet_10_button.png");
+var bet10hover = new createjs.Bitmap("img/bet_10_hover.png");
+var power = new createjs.Bitmap("img/power_button.png");
+var powerhover = new createjs.Bitmap("img/power_hover.png");
+var reset = new createjs.Bitmap("img/reset_button.png");
+var resethover = new createjs.Bitmap("img/reset_hover.png");
+var slotMachine = new createjs.Bitmap("img/slot_machine.png");
+var spin = new createjs.Bitmap("img/spin_button.png");
+var spinhover = new createjs.Bitmap("img/spin_hover.png");
+var jackpotText = new createjs.Text(0, "34px Lucida Console", "#FF0000");
+var betText = new createjs.Text(0, "34px Lucida Console", "#FF0000");
+var creditsText = new createjs.Text(0, "34px Lucida Console", "#FF0000");
+
+function initialize()
+{
+    stage = new createjs.Stage(document.getElementById('myCanvas'));
+    createjs.Ticker.addEventListener("tick", handleTick);
+    createjs.Ticker.setFPS(60);
+    stage.enableMouseOver(20);
+    drawSlotMachine();
+}
+
+function handleTick()
+{
+    stage.update();
+}
+
+function drawSlotMachine()
+{
+    //draw buttons on machine
+    bet1.x = 163;
+    bet1.y = 423;
+    bet1hover.x = 163;
+    bet1hover.y = 423;
+
+    bet5.x = 223;
+    bet5.y = 423;
+    bet5hover.x = 223;
+    bet5hover.y = 423;
+
+    bet10.x = 283;
+    bet10.y = 423;
+    bet10hover.x = 283;
+    bet10hover.y = 423;
+
+    reset.x = 43;
+    reset.y = 423;
+    resethover.x = 43;
+    resethover.y = 423;
+
+    spin.x = 393;
+    spin.y = 420;
+    spinhover.x = 393;
+    spinhover.y = 420;
+
+    power.x = 415;
+    power.y = 48;
+    powerhover.x = 415;
+    powerhover.y = 48;
+
+    //draw text
+    jackpotText.text = jackpot.toString();
+    jackpotText.x = 66;
+    jackpotText.y = 340;
+    jackpotText.textBaseline = "alphabetic";
+
+    betText.text = playerBet.toString();
+    betText.x = 228;
+    betText.y = 340;
+    betText.textBaseline = "alphabetic";
+
+    creditsText.text = playerMoney.toString();
+    creditsText.x = 324;
+    creditsText.y = 340;
+    creditsText.textBaseline = "alphabetic";
+
+    stage.addChild(slotMachine, bet1, bet5, bet10, reset, spin, power, betText, jackpotText, creditsText);
+}
+
+//event listeners
+bet1.addEventListener('mouseover', function () { stage.addChild(bet1hover) });
+bet1.addEventListener('mouseout', function () { stage.removechild(bet1hover) });
+
+bet5.addEventListener('mouseover', function () { stage.addChild(bet5hover) });
+bet5.addEventListener('mouseout', function () { stage.removechild(bet5hover) });
+
+bet10.addEventListener('mouseover', function () { stage.addChild(bet10hover) });
+bet10.addEventListener('mouseout', function () { stage.removechild(bet10hover) });
+
+reset.addEventListener('mouseover', function () { stage.addChild(resethover) });
+reset.addEventListener('mouseout', function () { stage.removechild(resethover) });
+
+spin.addEventListener('mouseover', function () { stage.addChild(spinhover) });
+spin.addEventListener('mouseout', function () { stage.removechild(spinhover) });
+
+power.addEventListener('mouseover', function () { stage.addChild(powerhover) });
+power.addEventListener('mouseout', function () { stage.removechild(powerhover) });
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Logic
+
+/// <reference path="jquery.js" />
 var playerMoney = 1000;
 var winnings = 0;
 var jackpot = 5000;
@@ -198,26 +319,23 @@ function determineWinnings() {
         lossNumber++;
         showLossMessage();
     }
-
 }
 
 /* When the player clicks the spin button the game kicks off */
-$("#spinButton").click(function () {
-    playerBet = $("div#betEntry>input").val();
-
+function spin() {
     if (playerMoney == 0) {
         if (confirm("You ran out of Money! \nDo you want to play again?")) {
             resetAll();
             showPlayerStats();
         }
     }
-    else if (playerBet > playerMoney) {
+    else if (betAmount > playerMoney) {
         alert("You don't have enough Money to place that bet.");
     }
-    else if (playerBet < 0) {
+    else if (betAmount < 0) {
         alert("All bets must be a positive $ amount.");
     }
-    else if (playerBet <= playerMoney) {
+    else if (betAmount <= playerMoney) {
         spinResult = Reels();
         fruits = spinResult[0] + " - " + spinResult[1] + " - " + spinResult[2];
         $("div#result>p").text(fruits);
@@ -228,5 +346,4 @@ $("#spinButton").click(function () {
     else {
         alert("Please enter a valid bet amount");
     }
-
-});
+};
