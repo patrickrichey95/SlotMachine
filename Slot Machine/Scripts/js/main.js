@@ -1,5 +1,14 @@
 ﻿/// <reference path="jquery.js" />
 /// <reference path="easeljs-0.7.1.min.js" />
+
+/* File: main.js
+ * Author: Tom Tsiliopulous
+ * Last Modified By: Patrick Richey
+ * Last Modified Date: October 31, 2014
+ * Description: This program runs all logic behind the slot machine, 
+ * as well as drawing all images to the screen
+ */
+
 //--------------------------------------------------------------------------------
 //Drawing
 
@@ -8,14 +17,13 @@ var count = 0;
 
 //create variables for images
 //--------------------------------------------------------------------------------
-var defaultImg = new createjs.Bitmap("img/spin.png");
 var seven = new createjs.Bitmap("img/7.png");
 var bar = new createjs.Bitmap("img/bar.png");
 var bell = new createjs.Bitmap("img/bell.png");
 var banana = new createjs.Bitmap("img/banana.png");
 var blank = new createjs.Bitmap("img/blank.png");
 var cherry = new createjs.Bitmap("img/cherry.png");
-var grapes = new createjs.Bitmap("img/grapes.png");
+var grape = new createjs.Bitmap("img/grapes.png");
 var orange = new createjs.Bitmap("img/orange.png");
 var bet1 = new createjs.Bitmap("img/bet_1_button.png");
 var bet1hover = new createjs.Bitmap("img/bet_1_hover.png");
@@ -34,32 +42,33 @@ var jackpotText = new createjs.Text(0, "34px Lucida Console", "#FF0000");
 var betText = new createjs.Text(0, "34px Lucida Console", "#FF0000");
 var creditsText = new createjs.Text(0, "34px Lucida Console", "#FF0000");
 var reel1, reel2, reel3;
-var reels = [reel1 = new createjs.Bitmap(defaultImg), reel2 = new createjs.Bitmap(defaultImg), reel3 = new createjs.Bitmap(defaultImg)];
+var reels = [reel1, reel2, reel3];
 
+//initializes the canvas and starts creating the slot machine graphic
 function initialize()
 {
     stage = new createjs.Stage(document.getElementById('myCanvas'));
     createjs.Ticker.addEventListener("tick", handleTick);
     createjs.Ticker.setFPS(60);
     drawSlotMachine();
-    stage.enableMouseOver(20);    
+    drawReels();
+    stage.enableMouseOver(20);
 }
 
+//handles updating and draws stats
 function handleTick()
 {
     drawStats();
     stage.update();
 }
 
+//draws all necessary elements of the slot machine (including buttons and other images)
 function drawSlotMachine()
 {
-    //add reel co-ordinates to machine
-    reels[0].x = 70;
-    reels[0].y = 190;
-    reels[1].x = 195;
-    reels[1].y = 190;
-    reels[2].x = 325;
-    reels[2].y = 190;
+    //set default image
+    reels[0] = new createjs.Bitmap("img/spin.png");
+    reels[1] = new createjs.Bitmap("img/spin.png");
+    reels[2] = new createjs.Bitmap("img/spin.png");
 
     //draw button co-ordinates on machine
     //--------------------------------------------------------------------------------
@@ -102,7 +111,7 @@ function drawSlotMachine()
     creditsText.x = 324;
     creditsText.y = 313;
 
-    //event listeners
+    //event listeners - change images when user hovers over them
     //--------------------------------------------------------------------------------
     bet1.addEventListener('mouseover', function () { stage.addChild(bet1hover) });
     bet1.addEventListener('mouseout', function () { stage.removeChild(bet1hover) });
@@ -125,19 +134,23 @@ function drawSlotMachine()
     //button press handling
     //--------------------------------------------------------------------------------
     //spin button clicked
-    spin.addEventListener("click", function() {
+    spin.addEventListener("click", function () {
+        //if user runs out of money
         if (playerMoney == 0) {
             if (confirm("You ran out of Money! \nDo you want to play again?")) {
                 resetAll();
                 showPlayerStats();
             }
         }
+        //if user tries to bet more than they have
         else if (playerBet > playerMoney) {
             alert("You don't have enough Money to place that bet.");
         }
+        //if bet not a valid number
         else if (playerBet <= 0) {
             alert("Must bet at least $1");
         }
+        //if player bet is affordable, run the simulation
         else if (playerBet <= playerMoney) {
             spinResult = Reels();
             fruits = spinResult[0] + " - " + spinResult[1] + " - " + spinResult[2];
@@ -181,19 +194,37 @@ function drawSlotMachine()
         }
     });
 
-    stage.addChild(slotMachine, bet1, bet5, bet10, reset, spin, power, betText, jackpotText, creditsText, reels[0], reels[1], reels[2]);
+    //draw slot machine images
+    stage.addChild(slotMachine, bet1, bet5, bet10, reset, spin, power, betText, jackpotText, creditsText);
+}
+
+//sets location of reel images, and draws them
+function drawReels() {
+    //add reel co-ordinates to machine
+    reels[0].x = 70;
+    reels[0].y = 175;
+    reels[1].x = 195;
+    reels[1].y = 175;
+    reels[2].x = 325;
+    reels[2].y = 175;
+
+    //draw reel images
+    stage.addChild(reels[0], reels[1], reels[2]);
 }
 
 //draw various stats to the screen and keep them updated
 function drawStats() {
+    //remove current text
     stage.removeChild(jackpotText);
     stage.removeChild(betText);
     stage.removeChild(creditsText);
 
+    //update text values
     jackpotText.text = jackpot.toString();
     betText.text = playerBet.toString();
     creditsText.text = playerMoney.toString();
 
+    //redraw text
     stage.addChild(jackpotText);
     stage.addChild(betText);
     stage.addChild(creditsText);
@@ -311,12 +342,12 @@ function Reels() {
             case checkRange(outCome[spin], 1, 27):  // 41.5% probability
                 betLine[spin] = "blank";
                 blanks++;
-                reels[spin].image = blank;
+                reels[spin] = blank;
                 break;
             case checkRange(outCome[spin], 28, 37): // 15.4% probability
                 betLine[spin] = "Grapes";
                 grapes++;
-                reels[spin] = grapes;
+                reels[spin] = grape;
                 break;
             case checkRange(outCome[spin], 38, 46): // 13.8% probability
                 betLine[spin] = "Banana";
@@ -350,6 +381,7 @@ function Reels() {
                 break;
         }
     }
+    drawReels();
     return betLine;
 }
 
