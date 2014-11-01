@@ -1,4 +1,4 @@
-﻿//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+﻿//--------------------------------------------------------------------------------
 //Drawing
 
 /// <reference path="easeljs-0.7.1.min.js" />
@@ -6,6 +6,8 @@ var stage;
 var count = 0;
 
 //create variables for images
+//--------------------------------------------------------------------------------
+var defaultImg = new createjs.Bitmap("img/spin.png");
 var seven = new createjs.Bitmap("img/7.png");
 var bar = new createjs.Bitmap("img/bar.png");
 var bell = new createjs.Bitmap("img/bell.png");
@@ -37,17 +39,19 @@ function initialize()
     createjs.Ticker.addEventListener("tick", handleTick);
     createjs.Ticker.setFPS(60);
     stage.enableMouseOver(20);
-    drawSlotMachine();
 }
 
 function handleTick()
 {
+    drawSlotMachine();
+    drawStats();
     stage.update();
 }
 
 function drawSlotMachine()
 {
     //draw buttons on machine
+    //--------------------------------------------------------------------------------
     bet1.x = 163;
     bet1.y = 423;
     bet1hover.x = 163;
@@ -78,43 +82,90 @@ function drawSlotMachine()
     powerhover.x = 415;
     powerhover.y = 48;
 
-    //draw text
-    jackpotText.text = jackpot.toString();
     jackpotText.x = 66;
-    jackpotText.y = 340;
-    jackpotText.textBaseline = "alphabetic";
+    jackpotText.y = 313;
 
-    betText.text = playerBet.toString();
     betText.x = 228;
-    betText.y = 340;
-    betText.textBaseline = "alphabetic";
+    betText.y = 313;
 
-    creditsText.text = playerMoney.toString();
     creditsText.x = 324;
-    creditsText.y = 340;
-    creditsText.textBaseline = "alphabetic";
+    creditsText.y = 313;
+
+    //event listeners
+    //--------------------------------------------------------------------------------
+    bet1.addEventListener('mouseover', function () { stage.addChild(bet1hover) });
+    bet1.addEventListener('mouseout', function () { stage.removeChild(bet1hover) });
+
+    bet5.addEventListener('mouseover', function () { stage.addChild(bet5hover) });
+    bet5.addEventListener('mouseout', function () { stage.removeChild(bet5hover) });
+
+    bet10.addEventListener('mouseover', function () { stage.addChild(bet10hover) });
+    bet10.addEventListener('mouseout', function () { stage.removeChild(bet10hover) });
+
+    reset.addEventListener('mouseover', function () { stage.addChild(resethover) });
+    reset.addEventListener('mouseout', function () { stage.removeChild(resethover) });
+
+    spin.addEventListener('mouseover', function () { stage.addChild(spinhover) });
+    spin.addEventListener('mouseout', function () { stage.removeChild(spinhover) });
+
+    power.addEventListener('mouseover', function () { stage.addChild(powerhover) });
+    power.addEventListener('mouseout', function () { stage.removeChild(powerhover) });
+
+    //button press handling
+    //--------------------------------------------------------------------------------
+    //spin button clicked
+    spin.addEventListener("click", function () {
+        spin();
+    });
+
+    //bet 1 button clicked
+    bet1.addEventListener("click", function () {
+        playerBet = 1;
+    });
+
+    //bet 5 button clicked
+    bet5.addEventListener("click", function () {
+        playerBet = 5;
+    });
+
+    //bet 10 button clicked
+    bet10.addEventListener("click", function () {
+        playerBet = 10;
+    });
+
+    //reset button clicked
+    reset.addEventListener("click", function () {
+        if (confirm("Are you sure you wish to reset? Click OK to reset, or click Cancel.")) {
+            window.location = "index.html";
+        }
+    });
+
+    //power button clicked
+    power.addEventListener("click", function () {
+        if (confirm("Are you sure you wish to quit? Clicking OK will close the window.")) {
+            window.location = "http://www.google.com";
+
+        }
+    });
 
     stage.addChild(slotMachine, bet1, bet5, bet10, reset, spin, power, betText, jackpotText, creditsText);
 }
 
-//event listeners
-bet1.addEventListener('mouseover', function () { stage.addChild(bet1hover) });
-bet1.addEventListener('mouseout', function () { stage.removechild(bet1hover) });
+//draw various stats to the screen and keep them updated
+function drawStats() {
+    stage.removeChild(jackpotText);
+    stage.removeChild(betText);
+    stage.removeChild(creditsText);
 
-bet5.addEventListener('mouseover', function () { stage.addChild(bet5hover) });
-bet5.addEventListener('mouseout', function () { stage.removechild(bet5hover) });
+    jackpotText.text = jackpot.toString();
+    betText.text = playerBet.toString();
+    creditsText.text = playerMoney.toString();
 
-bet10.addEventListener('mouseover', function () { stage.addChild(bet10hover) });
-bet10.addEventListener('mouseout', function () { stage.removechild(bet10hover) });
+    stage.addChild(jackpotText);
+    stage.addChild(betText);
+    stage.addChild(creditsText);
+}
 
-reset.addEventListener('mouseover', function () { stage.addChild(resethover) });
-reset.addEventListener('mouseout', function () { stage.removechild(resethover) });
-
-spin.addEventListener('mouseover', function () { stage.addChild(spinhover) });
-spin.addEventListener('mouseout', function () { stage.removechild(spinhover) });
-
-power.addEventListener('mouseover', function () { stage.addChild(powerhover) });
-power.addEventListener('mouseout', function () { stage.removechild(powerhover) });
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //Logic

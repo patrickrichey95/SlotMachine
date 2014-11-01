@@ -66,6 +66,7 @@
     <Content Include="img\bet_5_hover.png" />
     <Content Include="img\power_hover.png" />
     <Content Include="img\reset_hover.png" />
+    <Content Include="img\spin.png" />
     <Content Include="img\spin_hover.png" />
     <Content Include="packages.config" />
     <None Include="Web.Debug.config">
